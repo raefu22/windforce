@@ -1,0 +1,26 @@
+vector windspeed = chv('targetv');
+float airresist = chf('airresist');
+windspeed *= chf('scale');
+vector vel = v@v;
+float orig_airresist = f@airresist;
+vel = vel * orig_airresist;
+windspeed = windspeed * airresist;
+vel += windspeed;
+airresist += orig_airresist;
+vel /= airresist;
+
+// calculate percentage
+vector bbmin;
+vector bbmax;
+getbbox(0, bbmin, bbmax);
+float ymin = bbmin[1];
+float ymax = bbmax[1];
+
+float totaldist = ymax - ymin;
+float y = @P[1];
+y = y/totaldist;
+
+vel *= y;
+
+v@P += vel/$FPS;
+f@airresist = airresist;
